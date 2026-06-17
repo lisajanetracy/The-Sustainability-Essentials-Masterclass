@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Mapping Tool</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #166534;
+            margin-bottom: 20px;
+        }
+
+        .reminder {
+            background-color: #e8f4ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #166534;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            min-height: 80px;
+        }
+
+        .sectors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .sector-button {
+            padding: 15px;
+            background-color: #f0fdf4;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .sector-button:hover {
+            background-color: #dcfce7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 10px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #666;
+        }
+
+        .modal h3 {
+            color: #166534;
+            margin-bottom: 20px;
+        }
+
+        .modal h4 {
+            margin: 15px 0 10px 0;
+            color: #166534;
+        }
+
+        .modal ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .sectors {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Career Mapping Tool</h1>
+        <div class="reminder">
+            <p><strong>Remember:</strong> Your experience in responsible investment is highly valuable across many sectors. 
+            Skills in ESG analysis, stakeholder engagement, and understanding of sustainability challenges are increasingly sought after.</p>
+        </div>
+
+        <div class="section">
+            <h2>Your Current Strengths</h2>
+            <div>
+                <label>Technical Skills (e.g., ESG analysis, financial modeling)</label>
+                <textarea id="technicalSkills"></textarea>
+            </div>
+            <div>
+                <label>Soft Skills (e.g., stakeholder management, research)</label>
+                <textarea id="softSkills"></textarea>
+            </div>
+            <div>
+                <label>Industry Knowledge (e.g., sustainable finance, impact investment)</label>
+                <textarea id="industryKnowledge"></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Dream Career Elements</h2>
+            <div>
+                <label>Type of Impact (e.g., climate, social equity)</label>
+                <textarea id="typeOfImpact"></textarea>
+            </div>
+            <div>
+                <label>Work Environment (e.g., collaborative, independent)</label>
+                <textarea id="workEnvironment"></textarea>
+            </div>
+            <div>
+                <label>Growth Opportunities (e.g., leadership, technical depth)</label>
+                <textarea id="growthOpportunities"></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Potential Sectors to Consider</h2>
+            <p style="margin-bottom: 15px;">Click on sectors to learn more about how your skills transfer:</p>
+            <div class="sectors">
+                <button class="sector-button" onclick="showSectorInfo('Investment Management')">Investment Management</button>
+                <button class="sector-button" onclick="showSectorInfo('Sustainability Consulting')">Sustainability Consulting</button>
+                <button class="sector-button" onclick="showSectorInfo('Impact Investment')">Impact Investment</button>
+                <button class="sector-button" onclick="showSectorInfo('ESG Research')">ESG Research</button>
+                <button class="sector-button" onclick="showSectorInfo('Corporate Sustainability')">Corporate Sustainability</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Development Areas</h2>
+            <div>
+                <label>Skills to Develop</label>
+                <textarea id="skillsToDevelop"></textarea>
+            </div>
+            <div>
+                <label>Knowledge Gaps</label>
+                <textarea id="knowledgeGaps"></textarea>
+            </div>
+            <div>
+                <label>Experience to Gain</label>
+                <textarea id="experienceToGain"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="sectorModal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeSectorModal()">&times;</button>
+            <div id="sectorContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Save form data to localStorage
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.value = localStorage.getItem(textarea.id) || '';
+            textarea.addEventListener('input', e => {
+                localStorage.setItem(e.target.id, e.target.value);
+            });
+        });
+
+        const sectorData = {
+            'Investment Management': {
+                roles: [
+                    'ESG Portfolio Manager',
+                    'Sustainable Investment Strategist',
+                    'ESG Integration Specialist',
+                    'Responsible Investment Product Developer'
+                ],
+                skills: [
+                    'ESG analysis and integration experience',
+                    'Understanding of financial markets and investment processes',
+                    'Stakeholder engagement and reporting',
+                    'Risk assessment and management'
+                ],
+                organizations: [
+                    'Global asset management firms (BlackRock, Vanguard)',
+                    'Specialist ESG fund managers',
+                    'Investment banks with ESG focus',
+                    'Pension funds and insurers'
+                ],
+                requirements: [
+                    'Investment analysis experience (which you have)',
+                    'Understanding of ESG factors (your current expertise)',
+                    'Financial certifications (CFA, CIPM) - often preferred but not always required',
+                    'Strong analytical and communication skills'
+                ]
+            },
+            'Sustainability Consulting': {
+                roles: [
+                    'ESG Strategy Consultant',
+                    'Sustainability Transformation Advisor',
+                    'Climate Risk Consultant',
+                    'ESG Implementation Specialist'
+                ],
+                skills: [
+                    'Deep understanding of ESG frameworks and standards',
+                    'Experience with ESG data analysis and reporting',
+                    'Knowledge of investor expectations and requirements',
+                    'Ability to translate sustainability concepts for different audiences'
+                ],
+                organizations: [
+                    'Big Four consulting firms',
+                    'Specialist sustainability consultancies',
+                    'Management consulting firms with ESG practices',
+                    'Boutique ESG advisory firms'
+                ],
+                requirements: [
+                    'ESG knowledge and experience (your current role)',
+                    'Project management skills',
+                    'Strong client communication abilities',
+                    'Industry certifications (GRI, SASB) - can be obtained on the job'
+                ]
+            },
+            'Impact Investment': {
+                roles: [
+                    'Impact Investment Manager',
+                    'Impact Assessment Specialist',
+                    'Social Investment Analyst',
+                    'Impact Measurement Manager'
+                ],
+                skills: [
+                    'Understanding of both financial and impact metrics',
+                    'Experience in responsible investment analysis',
+                    'Stakeholder engagement expertise',
+                    'Knowledge of sustainable development goals'
+                ],
+                organizations: [
+                    'Impact investment funds',
+                    'Development finance institutions',
+                    'Family offices with impact focus',
+                    'Social impact accelerators'
+                ],
+                requirements: [
+                    'Investment analysis background (your current experience)',
+                    'Understanding of impact measurement',
+                    'Knowledge of development finance (can be learned)',
+                    'Strong analytical and relationship management skills'
+                ]
+            },
+            'ESG Research': {
+                roles: [
+                    'ESG Research Analyst',
+                    'Sustainability Ratings Analyst',
+                    'ESG Data Specialist',
+                    'Thematic Research Manager'
+                ],
+                skills: [
+                    'Experience in ESG analysis and evaluation',
+                    'Understanding of ESG data and metrics',
+                    'Knowledge of sustainability reporting frameworks',
+                    'Research and analytical capabilities'
+                ],
+                organizations: [
+                    'ESG data providers (MSCI, Sustainalytics)',
+                    'Credit rating agencies',
+                    'Investment research firms',
+                    'Think tanks and research institutions'
+                ],
+                requirements: [
+                    'Strong analytical skills (demonstrated in your current role)',
+                    'Understanding of ESG factors and metrics',
+                    'Research experience',
+                    'Data analysis capabilities'
+                ]
+            },
+            'Corporate Sustainability': {
+                roles: [
+                    'Corporate Sustainability Manager',
+                    'ESG Program Director',
+                    'Sustainability Reporting Manager',
+                    'Net Zero Strategy Lead'
+                ],
+                skills: [
+                    'Understanding of investor ESG expectations',
+                    'Experience with ESG reporting and frameworks',
+                    'Stakeholder engagement expertise',
+                    'Knowledge of sustainability best practices'
+                ],
+                organizations: [
+                    'Large corporations across all sectors',
+                    'Financial institutions',
+                    'Technology companies',
+                    'Industrial and manufacturing firms'
+                ],
+                requirements: [
+                    'ESG knowledge and experience (your current expertise)',
+                    'Understanding of corporate operations',
+                    'Project management skills',
+                    'Strong communication abilities'
+                ]
+            }
+        };
+
+        function showSectorInfo(sector) {
+            const modal = document.getElementById('sectorModal');
+            const content = document.getElementById('sectorContent');
+            const data = sectorData[sector];
+
+            content.innerHTML = `
+                <h3>${sector}</h3>
+                
+                <h4>Common Roles</h4>
+                <ul>
+                    ${data.roles.map(role => `<li>${role}</li>`).join('')}
+                </ul>
+
+                <h4>Your Transferable Skills</h4>
+                <ul>
+                    ${data.skills.map(skill => `<li>${skill}</li>`).join('')}
+                </ul>
+
+                <h4>Key Organizations</h4>
+                <ul>
+                    ${data.organizations.map(org => `<li>${org}</li>`).join('')}
+                </ul>
+
+                <h4>Typical Requirements</h4>
+                <ul>
+                    ${data.requirements.map(req => `<li>${req}</li>`).join('')}
+                </ul>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeSectorModal() {
+            document.getElementById('sectorModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('sectorModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
